@@ -146,10 +146,3 @@ if 'lion' in ss:
 # https://github.com/best-doctor/guides/blob/master/guides/python_styleguide.md
 
 
-
-
-
-
-
-
-
