@@ -144,3 +144,5 @@ if 'lion' in ss:
 # Практически все они основываются на PEP8, с небольшими исключениями, принятыми в этой команде.
 # Как пример стайл-гайда небольшой компании рекомендую почитать
 # https://github.com/best-doctor/guides/blob/master/guides/python_styleguide.md
+
+
