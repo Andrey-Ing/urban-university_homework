@@ -1,1 +1,1 @@
-My homeworks for the Urban university Python Developer course
+My homeworks for the Urban university Python developer course.
