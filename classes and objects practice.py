@@ -32,7 +32,7 @@ class Man:
         if self.fullness <= 0:
             print('{} умер...'.format(self.name))
             return
-        dice = randint (1, 6)
+        dice = randint(1, 6)
         if self.fullness < 20:
             self.eat()
         elif self.food < 10:
@@ -47,10 +47,10 @@ class Man:
             self.play_DOTA()
 
 
-
 vasya = Man(name='Вася')
 for day in range(1, 21):
-    cprint('============== день {} =============='.format(day), color = 'yellow')
+    cprint('============== день {} =============='.format(day), color='yellow')
     vasya.act()
     print(vasya)
+
 
