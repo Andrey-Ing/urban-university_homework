@@ -21,5 +21,10 @@ class EvenNumbers:
 even = EvenNumbers(3, 23)
 print(list(even))
 print(list(even))
+
 even = EvenNumbers()
 print(list(even))
+
+en = EvenNumbers(10, 25)
+for i in en:
+    print(i)
