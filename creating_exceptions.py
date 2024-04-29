@@ -15,7 +15,7 @@ def robot_movement_system(power, direction):
     elif power == 'nuclear_reactor':
         print('Питание от реактора')
     else:
-        raise InvalidPowerSupplyException
+        raise 'InvalidPowerSupplyException'
 
     if direction == 'left':
         print('я поехал на лево')
