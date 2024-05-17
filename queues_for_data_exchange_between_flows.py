@@ -39,7 +39,7 @@ class Cafe:
         self.customer_number = 0
         self.customer_are_still = True
 
-    def customer_arrival(self, max_number_of_customer=20):
+    def customer_arrival(self, max_number_of_customer=10):
         while self.customer_number < max_number_of_customer:
 
             self.customer_number += 1
@@ -65,15 +65,26 @@ class Cafe:
         self.customer_are_still = False
 
     def serve_customer(self):
-        while self.customer_are_still or not self.queue_customer.empty():
+        tables_in_operation = False
+        while self.customer_are_still or tables_in_operation:
+            tables_in_operation = False
+
             # Ищем столики на которых посетители завершили обслуживание
             for table in self.tables:
                 if table.is_complete_service():
-                    # Рассаживаем клиентов ждущих в очереди
-                    if not self.queue_customer.empty():
+                    if self.queue_customer.empty():
+                        table.customer = None
+                    else:
+                        # Рассаживаем клиентов ждущих в очереди
                         custom = self.queue_customer.get()
                         table.start_maintenance(custom)
+                else:
+                    # Какой-то столик ещё занят
+                    tables_in_operation = True
+
             sleep(0.2)
+
+        print('\033[96m'+'Все посетители обслужены!')
 
 
 class Customer(Thread):
@@ -95,7 +106,7 @@ tables = [table1, table2, table3]
 cafe = Cafe(tables)
 
 # Запускаем поток для прибытия посетителей
-customer_arrival_thread = Thread(target=cafe.customer_arrival)
+customer_arrival_thread = Thread(target=cafe.customer_arrival, args=(20,))
 customer_arrival_thread.start()
 
 # Запускаем поток для обслуживания посетителей
