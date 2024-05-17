@@ -1,6 +1,8 @@
-from threading import Thread
+from threading import Thread, Lock
 from time import sleep
 from queue import Queue
+
+lock = Lock()
 
 
 class Table:
@@ -10,22 +12,24 @@ class Table:
         self.is_busy = False
 
     def start_maintenance(self, customer):
-        self.is_busy = True
-        self.customer = customer
-        self.customer.start()
-        print(f'Посетитель {self.customer.number} сел за стол номер {self.number}')
+        with lock:
+            self.is_busy = True
+            self.customer = customer
+            self.customer.start()
+            print(f'Посетитель {self.customer.number} сел за стол номер {self.number}')
 
     def is_complete_service(self):
-        if self.customer is not None:
-            if self.customer.is_alive():
-                return False
+        with lock:
+            if self.customer is not None:
+                if self.customer.is_alive():
+                    return False
+                else:
+                    print('\033[92m'+f'Посетитель номер {self.customer.number} покушал и '
+                          f'осводил стол номер {self.number}'+'\033[0m')
+                    self.is_busy = False
+                    return True
             else:
-                print('\033[92m'+f'Посетитель номер {self.customer.number} покушал и '
-                      f'осводил стол номер {self.number}'+'\033[0m')
-                is_busy = False
                 return True
-        else:
-            return True
 
 
 class Cafe:
