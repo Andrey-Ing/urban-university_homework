@@ -1,4 +1,4 @@
-from threading import Thread, Lock
+from threading import Thread
 from time import sleep
 from queue import Queue
 
@@ -10,18 +10,18 @@ class Table:
         self.is_busy = False
 
     def start_maintenance(self, customer):
-        is_busy = True
+        self.is_busy = True
         self.customer = customer
         self.customer.start()
         print(f'Посетитель {self.customer.number} сел за стол номер {self.number}')
 
     def is_complete_service(self):
         if self.customer is not None:
-            if self.customer.isAlive():
+            if self.customer.is_alive():
                 return False
             else:
-                print(f'Посетитель номер {self.customer.customer_number} покушал и'
-                      f'осводил стол номер {self.number}')
+                print('\033[92m'+f'Посетитель номер {self.customer.number} покушал и '
+                      f'осводил стол номер {self.number}'+'\033[0m')
                 is_busy = False
                 return True
         else:
@@ -35,21 +35,20 @@ class Cafe:
         self.customer_number = 0
         self.customer_are_still = True
 
-    def customer_arrival(self, max_number_of_customer = 20):
-        while self.customer_number <= max_number_of_customer:
+    def customer_arrival(self, max_number_of_customer=20):
+        while self.customer_number < max_number_of_customer:
 
             self.customer_number += 1
 
             custom = Customer(self.customer_number)
-            print(f'Посетитель номер {custom.number} прибыл')
+            print('\033[34m'+f'Посетитель номер {custom.number} прибыл'+'\033[0m')
 
-            # Ищем свободный столик
-
-            for i in range(self.tables):
-                if self.tables[i].is_busy
-
-
-            ind = next((x for x in self.tables if x.is_busy is False), None)
+            # Ищем индекс свободного столика
+            ind = None
+            for i in range(len(self.tables)):
+                if not self.tables[i].is_busy:
+                    ind = i
+                    break
 
             if ind is None:
                 self.queue_customer.put(custom)
@@ -61,16 +60,16 @@ class Cafe:
 
         self.customer_are_still = False
 
-
     def serve_customer(self):
-        while self.customer_are_still and not self.queue_customer.empty():
+        while self.customer_are_still or not self.queue_customer.empty():
             # Ищем столики на которых посетители завершили обслуживание
             for table in self.tables:
-                if table.is_complete_service(self):
+                if table.is_complete_service():
                     # Рассаживаем клиентов ждущих в очереди
                     if not self.queue_customer.empty():
                         custom = self.queue_customer.get()
                         table.start_maintenance(custom)
+            sleep(0.2)
 
 
 class Customer(Thread):
