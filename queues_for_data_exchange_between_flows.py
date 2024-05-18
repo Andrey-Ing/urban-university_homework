@@ -2,6 +2,8 @@ from threading import Thread, Lock
 from time import sleep
 from queue import Queue
 
+lock = Lock()
+
 
 class Table:
     def __init__(self, number):
@@ -10,22 +12,24 @@ class Table:
         self.is_busy = False
 
     def start_maintenance(self, customer):
-        is_busy = True
-        self.customer = customer
-        self.customer.start()
-        print(f'Посетитель {self.customer.number} сел за стол номер {self.number}')
+        with lock:
+            self.is_busy = True
+            self.customer = customer
+            self.customer.start()
+            print(f'Посетитель {self.customer.number} сел за стол номер {self.number}')
 
     def is_complete_service(self):
-        if self.customer is not None:
-            if self.customer.isAlive():
-                return False
+        with lock:
+            if self.customer is not None:
+                if self.customer.is_alive():
+                    return False
+                else:
+                    print('\033[92m'+f'Посетитель номер {self.customer.number} покушал и '
+                          f'осводил стол номер {self.number}'+'\033[0m')
+                    self.is_busy = False
+                    return True
             else:
-                print(f'Посетитель номер {self.customer.customer_number} покушал и'
-                      f'осводил стол номер {self.number}')
-                is_busy = False
                 return True
-        else:
-            return True
 
 
 class Cafe:
@@ -35,18 +39,18 @@ class Cafe:
         self.customer_number = 0
         self.customer_are_still = True
 
-    def customer_arrival(self, max_number_of_customer=20):
+    def customer_arrival(self, max_number_of_customer=10):
         while self.customer_number < max_number_of_customer:
 
             self.customer_number += 1
 
             custom = Customer(self.customer_number)
-            print(f'Посетитель номер {custom.number} прибыл')
+            print('\033[34m'+f'Посетитель номер {custom.number} прибыл'+'\033[0m')
 
-            # Ищем свободный столик
+            # Ищем индекс свободного столика
             ind = None
             for i in range(len(self.tables)):
-                if self.tables[i].is_busy:
+                if not self.tables[i].is_busy:
                     ind = i
                     break
 
@@ -60,16 +64,27 @@ class Cafe:
 
         self.customer_are_still = False
 
-
     def serve_customer(self):
-        while self.customer_are_still and not self.queue_customer.empty():
+        tables_in_operation = False
+        while self.customer_are_still or tables_in_operation:
+            tables_in_operation = False
+
             # Ищем столики на которых посетители завершили обслуживание
             for table in self.tables:
-                if table.is_complete_service(self):
-                    # Рассаживаем клиентов ждущих в очереди
-                    if not self.queue_customer.empty():
+                if table.is_complete_service():
+                    if self.queue_customer.empty():
+                        table.customer = None
+                    else:
+                        # Рассаживаем клиентов ждущих в очереди
                         custom = self.queue_customer.get()
                         table.start_maintenance(custom)
+                else:
+                    # Какой-то столик ещё занят
+                    tables_in_operation = True
+
+            sleep(0.2)
+
+        print('\033[96m'+'Все посетители обслужены!')
 
 
 class Customer(Thread):
@@ -91,7 +106,7 @@ tables = [table1, table2, table3]
 cafe = Cafe(tables)
 
 # Запускаем поток для прибытия посетителей
-customer_arrival_thread = Thread(target=cafe.customer_arrival)
+customer_arrival_thread = Thread(target=cafe.customer_arrival, args=(20,))
 customer_arrival_thread.start()
 
 # Запускаем поток для обслуживания посетителей
