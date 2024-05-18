@@ -35,8 +35,8 @@ class Cafe:
         self.customer_number = 0
         self.customer_are_still = True
 
-    def customer_arrival(self, max_number_of_customer = 20):
-        while self.customer_number <= max_number_of_customer:
+    def customer_arrival(self, max_number_of_customer=20):
+        while self.customer_number < max_number_of_customer:
 
             self.customer_number += 1
 
@@ -44,12 +44,11 @@ class Cafe:
             print(f'Посетитель номер {custom.number} прибыл')
 
             # Ищем свободный столик
-
-            for i in range(self.tables):
-                if self.tables[i].is_busy
-
-
-            ind = next((x for x in self.tables if x.is_busy is False), None)
+            ind = None
+            for i in range(len(self.tables)):
+                if self.tables[i].is_busy:
+                    ind = i
+                    break
 
             if ind is None:
                 self.queue_customer.put(custom)
