@@ -14,10 +14,11 @@ for site in sites:
         response = rq.get(site, timeout=3)
         print(response)
         logging.info(f'\'{site}\', response - {response.status_code}')
-    except  rq.exceptions.RequestsWarning:
-        print(response)
-        .exceptions
 
-#         'https://www.youtube.com/', response - 200
-#
-# logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="w")
+    except rq.exceptions.RequestsWarning:
+        logging.basicConfig(level=logging.WARNING, filename="bad_responses.log", filemode="w")
+        logging.warning(f'\'{site}\', response - {response.status_code}')
+
+    except (rq.exceptions.ConnectionError, rq.exceptions.Timeout):
+        logging.basicConfig(level=logging.ERROR, filename="blocked_responses.log", filemode="w")
+        logging.error(f'\'{site}\', NO CONNECTION')
