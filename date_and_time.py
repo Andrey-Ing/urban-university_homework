@@ -4,17 +4,81 @@ print(datetime)
 
 
 class SuperDate(datetime):
-    def __init__(self, year, month=None, day=None, hour=0, minute=0, second=0,
-                microsecond=0, tzinfo=None, *, fold=0):
+
+    def __init__(self, hemispheres, year, month=None, day=None, hour=0, minute=0, second=0,
+                microsecond=0, tzinfo=None, *args, fold=0):
         super().__init__(year=year, month=month, day=day, hour=hour, minute=minute, second=second,
-                         microsecond=microsecond, tzinfo=tzinfo, fold=fold)
+                         microsecond=microsecond, tzinfo=tzinfo, *args, fold=fold)
+
+        self.season = None
+        if hemispheres == 'northern':
+            self.season = {3:'Summer', 8:'Autumn', 'Winter', 'Spring'}
+
+
+            В
+            северном
+            полушарии
+            весна
+            начинается
+            1
+            марта, лето — 1
+            июня, осень — 1
+            сентября, а
+            зима — 1
+            декабря.В
+            южном
+            полушарии
+            весна
+            начинается
+            1
+            сентября, лето — 1
+            декабря, осень — 1
+            марта, зима — 1
+            июня.
+            3: «Лето», 8: «Осень», «Зима», «Весна».
+        = {3:'Summer', 8:'Autumn', 'Winter', 'Spring'}
+
+        southern
+        northern
+
+    def get_season(self):
+        self._month
 
 
 
 
-        hour = 0, minute = 0, second = 0,
-        microsecond = 0, tzinfo = None, *, fold = 0):
-        self.name = year
+
+        1.
+        get_season - должен
+        возвращать
+        сезон
+        года(Summer, Autumn, Winter, Spring)
+        2.
+        get_time_of_day - должен
+        возвращать
+        время
+        суток
+        (Morning: 6-12; Day: 12-18, Evening: 18-0, Night: 0-6)(последнее
+        число
+        не
+        включено
+        в
+        промежуток)
+
+
+        Пример
+        работы
+        класса:
+
+        a = SuperDate(2024, 2, 22, 12)
+        print(a.get_season())
+        print(a.get_time_of_day())
+
+        Вывод
+        на
+        консоль:
+        Winter
+        Day
 
 
 
