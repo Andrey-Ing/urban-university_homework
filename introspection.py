@@ -32,3 +32,4 @@ print(introspection_info(a), '\n',
       introspection_info(b), '\n',
       introspection_info(c), '\n',
       introspection_info(d),)
+
