@@ -6,7 +6,7 @@ while True:
     ret, frame = cap_img.read()
 
     eyes = cv2.CascadeClassifier('haarcascade_eye.xml')
-    result = eyes.detectMultiScale(cap_img, scaleFactor=1, minNeighbors=1)
+    result = eyes.detectMultiScale(frame, scaleFactor=1.2, minNeighbors=1)
 
 
 
