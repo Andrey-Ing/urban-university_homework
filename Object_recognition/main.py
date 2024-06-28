@@ -7,25 +7,37 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     eyes = cv2.CascadeClassifier('haarcascade_eye.xml')
-    result_eyes = eyes.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=1)
+    result_eyes = eyes.detectMultiScale(gray, scaleFactor=2, minNeighbors=1)
 
-    pt1_area = (frame.shape[1], 0)
-    pt2_area = (0, 0)
+    pt1_area = [frame.shape[1], 0]
+    pt2_area = [0, 0]
 
     print(pt1_area, pt2_area)
 
     for (x, y, w, h) in result_eyes:
         if x < pt1_area[0]:
-            pt1_area = x, y
+            pt1_area = [x, y]
 
         if y + h > pt2_area[1]:
-            pt2_area = x + w, y + h
+            pt2_area = [x + w, y + h]
 
+    horizontal_offset = 30
+
+    if pt1_area[0] < pt2_area[0]:
+        pt1_area[0] = pt1_area[0] - horizontal_offset
+        pt2_area[0] = pt2_area[0] + horizontal_offset
+    else:
+        pt1_area[0] = pt1_area[0] + horizontal_offset
+        pt2_area[0] = pt2_area[0] - horizontal_offset
+
+    # cv2.rectangle(frame, pt1_area, pt2_area, (0, 255, 0), 2)
+
+    # cv2.rectangle(frame, (200, 200), (300, 300), (200, 255, 70), 2)
 
     cv2.rectangle(frame, pt1_area, pt2_area, (0, 255, 0), 2)
 
 
-    #cv2.rectangle(frame, (400, 400), (400, 400), (0, 255, 0), 2)
+    cv2.rectangle(frame, (200, 200), (300, 300), (200, 255, 70), 2)
     # cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     print(result_eyes)
