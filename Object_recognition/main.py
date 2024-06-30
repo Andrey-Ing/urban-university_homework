@@ -8,7 +8,7 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     eyes = cv2.CascadeClassifier('haarcascade_eye.xml')
-    result_eyes = eyes.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=2)
+    result_eyes = eyes.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=19)
 
     horizontal_offset = 30
 
