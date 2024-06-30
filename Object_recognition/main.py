@@ -34,7 +34,7 @@ while True:
         if y_max > frame.shape[0]:
             y_max = frame.shape[0]
 
-    gray = cv2.GaussianBlur(gray, (5, 9), cv2.BORDER_DEFAULT)
+    gray = cv2.GaussianBlur(gray, (0, 0), sigmaX=14, sigmaY=9, borderType=cv2.BORDER_DEFAULT)
     color_gray = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
     color_gray = color_gray[y_min:y_max, x_min:x_max]
 
