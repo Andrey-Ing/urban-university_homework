@@ -1,0 +1,37 @@
+PS C:\Users\I\PycharmProjects\urban-university_homework\Django_19_module\my_django_project> python manage.py shell
+Python 3.12.3 (tags/v3.12.3:f6650f9, Apr  9 2024, 14:05:25) [MSC v.1938 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>>
+>>> from task1.models import Buyer
+>>> Buyer.objects.all()
+<QuerySet []>
+>>> B_obj = Buyer.objects
+>>> B_obj.create(name = 'Dmitriy', balance = 10000, age = 27)
+<Buyer: Buyer object (1)>
+>>> B_obj.create(name = 'Sergey', balance = 12000, age = 31)
+<Buyer: Buyer object (2)>
+>>> B_obj.create(name = 'Victoria', balance = 5000, age = 16)
+<Buyer: Buyer object (3)>
+>>> Buyer.objects.all()
+<QuerySet [<Buyer: Buyer object (1)>, <Buyer: Buyer object (2)>, <Buyer: Buyer object (3)>]>
+>>>
+>>> from task1.models import Game
+>>> G_obj = Game.objects
+>>> G_obj.create(title = 'Tetris', cost = '130', size = 3639.23, description = 'игра, в которой игрок управляет падающими геометрическими фигурами (называемыми тетромино) и располагает их так, чтобы создавать горизонтальные линии без пробелов. Когда горизонтальная линия заполняется, она исчезает, освобождая место для следующих фигур', age_limited = False)
+<Game: Game object (1)>
+>>> G_obj.create(title = 'Chess', cost = '240', size = 8456.94, description = 'древняя игра специальными фигурами на 64-клеточной доске для двух игроков. Название шахматы происходит от персидского названия «шах мат», что переводится, как властитель умер. Цель игры – объявить мат королю соперника.', age_limited = True)
+<Game: Game object (2)>
+>>> G_obj.create(title = 'Checkers', cost = '95', size = 1456.16, description = ' настольная игра по определённым правилам между двумя соперниками, цель которой - добиться победы за счёт уничтожения или запирания всех шашек соперника.', age_limited = False)
+<Game: Game object (3)>
+>>> G_obj.all()
+<QuerySet [<Game: Game object (1)>, <Game: Game object (2)>, <Game: Game object (3)>]>
+>>>
+>>> first_buyer = B_obj.get(id=1)
+>>> second_buyer = B_obj.get(id=2)
+>>> third_buyer = B_obj.get(id=3)
+>>>
+>>> G_obj.get(id=1).buyer.set((first_buyer,))
+>>> G_obj.get(id=2).buyer.set((first_buyer, second_buyer))
+>>> G_obj.get(id=3).buyer.set((first_buyer, second_buyer, third_buyer))
+>>>
