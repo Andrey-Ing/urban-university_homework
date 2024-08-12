@@ -21,13 +21,49 @@ import pandas as pd
 
 
 
-t = np.linspace(0, 2 * np.pi, 1000)
+# t = np.linspace(0, 2 * np.pi, 1000)
+#
+# #px.scatter(x=np.sin(2 * t), y=np.cos(3 * t)).show()
+#
+# fig = go.Figure()
+# fig.add_trace(go.Scatter(x=np.sin(2 * t), y=np.cos(3 * t)))
+# fig.show()
 
-#px.scatter(x=np.sin(2 * t), y=np.cos(3 * t)).show()
+import plotly.graph_objects as go
+import my_datasets as md
 
-fig = go.Figure()
-fig.add_trace(go.Scatter(x=np.sin(2 * t), y=np.cos(3 * t)))
+def grid_to_list3d(x_grid, y_grid, z_grid):
+    x_list = x_grid.flatten()
+    y_list = y_grid.flatten()
+    z_list = z_grid.flatten()
+    return x_list, y_list, z_list
+
+
+
+
+# x_grid, y_grid, z_grid = md.get_3d_data()
+# fig = go.Figure(data=[go.Scatter3d(
+#     x=x_grid.flatten(),
+#     y=y_grid.flatten(),
+#     z=z_grid.flatten(),
+#     mode='markers',
+#     marker=dict(
+#         size=2,
+#         color='peru',  # set color to an array/list of desired values
+#         opacity=0.8))])  # прозрачность
+# print(x_grid.shape)
+# #fig = px.scatter_3d(x=x_grid, y=y_grid, z=z_grid)
+# fig.show()
+
+
+import my_datasets as md
+data = md.get_pandas_dataframe()
+
+import plotly.express as px
+fig = px.line(data_frame=data, x='Date', y='Price', title='Apple Share Prices over time (2014)')
 fig.show()
+
+
 
 
 

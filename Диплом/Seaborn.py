@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 # plt.show()
 
 
-t = np.linspace(0, 2 * np.pi, 10000)
+t = np.linspace(0, 2 * np.pi, 100)
 
 sns.lineplot(x=np.sin(2 * t), y=np.cos(3 * t))
 plt.show()
