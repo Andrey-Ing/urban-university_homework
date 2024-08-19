@@ -1,12 +1,16 @@
-import numpy as np
+import matplotlib.pyplot as plt
 
-# Координаты
-x = np.linspace(0, 1, 3)  # Генерируем три точки в диапазоне от 0 до 1
-y = np.linspace(0, 1, 2)  # Генерируем две точки в диапазоне от 0 до 1
+fig, ax = plt.subplots()
 
-# Создаем сетку
-X, Y = np.meshgrid(x, y)
+fruits = ['apple', 'blueberry', 'cherry', 'orange']
+counts = [[40,70,30], 100, 30, 55]
+bar_labels = ['red', 'blue', '_red', 'orange']
+bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
 
-# Отображаем полученные массивы X и Y
-print("X:", X)
-print("Y:", Y)
+ax.bar(fruits, counts, label=bar_labels, color=bar_colors)
+
+ax.set_ylabel('fruit supply')
+ax.set_title('Fruit supply by kind and color')
+ax.legend(title='Fruit color')
+
+plt.show()
