@@ -2,8 +2,6 @@ import requests
 import numpy as np
 import pandas as pd
 
-from pprint import pprint as pp
-
 
 def get_lissajous_figure():
     t = np.linspace(0, 2 * np.pi, 200)
@@ -22,10 +20,11 @@ def get_github_list_data():
     values_week = np.array(req['all'][-len(weeks)-1:-1])
     return {'Week': weeks, 'Quantity': values_week}, 'My Github commit count'
 
+
 def get_3d_data():
     # Генерируем данные
     x = np.linspace(-20, 20, 100)
     y = np.linspace(-20, 20, 100)
     x_grid, y_grid = np.meshgrid(x, y)
     z_grid = np.sqrt(x_grid ** 2 + y_grid ** 2) + 3 * np.cos(np.sqrt(x_grid ** 2 + y_grid ** 2)) + 5
-    return x_grid, y_grid, z_grid
+    return (x_grid, y_grid, z_grid), '3D flower'

@@ -10,9 +10,7 @@ def scatter(dataset=md.get_lissajous_figure()):
     plt.show()
 
 
-#scatter()
-
-def lineplot(dataset=md.get_pandas_dataframe()):
+def line_plot(dataset=md.get_pandas_dataframe()):
     data, name = dataset
     sns.set_theme(style="dark")
     line = sns.lineplot(data=data, x="Date", y="Price")
@@ -26,8 +24,6 @@ def lineplot(dataset=md.get_pandas_dataframe()):
     plt.tight_layout()
     plt.show()
 
-#lineplot()
-
 
 def bar_plot(dataset=md.get_github_list_data()):
     data, name = dataset
@@ -36,20 +32,23 @@ def bar_plot(dataset=md.get_github_list_data()):
 
     plt.show()
 
-bar_plot()
 
+def joint_grid(dataset=md.get_3d_data()):
+    data, name = dataset
+    x_grid, y_grid, z_grid = data
 
+    df = pd.DataFrame({
+        'X': x_grid.flatten(), 'Y': y_grid.flatten(), 'Z': z_grid.flatten()})
 
+    sns.set_theme(style='darkgrid')
 
+    g = sns.JointGrid(data=df, x='X', y='Z', hue='X')
+    g.plot(sns.scatterplot, sns.histplot)
+    g.fig.suptitle(f'{name} to show the joint grid')
 
+    plt.show()
 
-
-
-
-
-
-
-
-
-
-
+# scatter()
+# line_plot()
+# bar_plot()
+# joint_grid()
