@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import my_datasets as md
 
 
+# минимальный код для отображения графиков
 def scatter(dataset=md.get_lissajous_figure()):
     plt.scatter(x=dataset[0], y=dataset[1])
     plt.show()
@@ -13,8 +14,8 @@ def line_plot(dataset=md.get_pandas_dataframe()):
     plt.gcf().set_size_inches(15, 10)
     ax.plot(data['Date'], data['Price'])
     ax.set_title(name)
+    # прореживаем подписи на оси X
     x_index = range(1, len(data['Date']), 1000)
-    # Убираем подписи осей
     plt.xticks(x_index, rotation=60)
 
     plt.show()
@@ -47,11 +48,11 @@ def scatter_3d(dataset=md.get_3d_data()):
     # ax_3d.scatter(x_grid, y_grid, z_grid, s=2, c='r')  # строит на основе точек
     ax_3d.plot_surface(x_grid, y_grid, z_grid, cmap='viridis')  # строит поверхность
     ax_3d.set_xlabel('x'), ax_3d.set_ylabel('y'), ax_3d.set_zlabel('z')
-    ax_3d.set_title(name)  # устанавливаем название графика
+    ax_3d.set_title(name)
     plt.show()
 
 
 # scatter()
 # line_plot()
 # bar_plot()
-# scatter_3d()
+scatter_3d()

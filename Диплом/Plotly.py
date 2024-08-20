@@ -3,6 +3,7 @@ import plotly.express as px
 import my_datasets as md
 
 
+# минимальный код для отображения графиков
 def scatter(dataset=md.get_lissajous_figure()):
     px.scatter(x=dataset[0], y=dataset[1]).show()
 
@@ -34,7 +35,7 @@ def scatter_3d(dataset=md.get_3d_data()):
         marker_color=z_grid.flatten(),
         marker=dict(
             size=2,
-            opacity=0.8))])  # прозрачность
+            opacity=0.8))])
     fig.add_annotation(dict(text=name, x=0.7, y=0.7, font_size=25, showarrow=False))
     fig.show()
 
@@ -42,4 +43,4 @@ def scatter_3d(dataset=md.get_3d_data()):
 # scatter()
 # line_plot()
 # bar_plot()
-# scatter_3d()
+scatter_3d()

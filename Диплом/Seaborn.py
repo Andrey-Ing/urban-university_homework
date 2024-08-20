@@ -4,6 +4,7 @@ import pandas as pd
 import my_datasets as md
 
 
+# минимальный код для отображения графиков
 def scatter(dataset=md.get_lissajous_figure()):
     data = pd.DataFrame({'x': dataset[0], 'y': dataset[1]})
     sns.scatterplot(data=data, x='x', y='y')
@@ -15,13 +16,11 @@ def line_plot(dataset=md.get_pandas_dataframe()):
     sns.set_theme(style="dark")
     line = sns.lineplot(data=data, x="Date", y="Price")
     line.set_title(name)
+    # прореживаем подписи на оси X
     x_index = range(1, len(data['Date']), 1000)
-    # Убираем подписи осей
     plt.xticks(x_index, rotation=60)
 
-    plt.yticks([])
-
-    plt.tight_layout()
+    plt.tight_layout()  # настраивает отступы
     plt.show()
 
 
