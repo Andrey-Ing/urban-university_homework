@@ -3,7 +3,7 @@ from matplotlib.gridspec import GridSpec
 import matplotlib.animation as animation
 import cv2
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 ws = [1, 1, 1]
 hs = [1, 3]
@@ -28,17 +28,18 @@ def histogram(non):
     ax1 = fig.add_subplot(gs[0, 0])
     ax1.set_title("RED channel")
     ax1.grid(True)
-    ax1.plot(hist_r, color="red")
+    ax1.semilogy(hist_r, color="red")
+
 
     ax2 = fig.add_subplot(gs[0, 1])
     ax2.set_title("GREEN channel")
     ax2.grid(True)
-    ax2.plot(hist_g, color="green")
+    ax2.semilogy(hist_g, color="green")
 
     ax3 = fig.add_subplot(gs[0, 2])
     ax3.set_title("BLUE channel")
     ax3.grid(True)
-    ax3.plot(hist_b, color="blue")
+    ax3.semilogy(hist_b, color="blue")
 
     ax4 = fig.add_subplot(gs[1, 0:2])
     ax4.set_yticklabels([])
