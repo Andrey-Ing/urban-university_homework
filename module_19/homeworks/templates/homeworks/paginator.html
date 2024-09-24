@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static "css/styles.css" %}" />
+    <title>paginator</title>
+</head>
+<body>
+    <h1>Демо с сайта sqliteonline.com</h1>
+    <ul>
+        {% for post in page_posts %}
+            <li>
+                {{ post.id }} ({{ post.name }})
+                <p>{{ post.hint }}</p>
+            </li>
+        {% empty %}
+            <p>Нет постов.</p>
+        {% endfor %}
+    </ul>
+    <!-- показываем пагинатор -->
+    <div class="pagination">
+        <p>Страницы:</p>
+        <ul>
+            {% if page_posts.has_previous %}
+                <li><a href="?page=1"><<</a></li>
+                <li><a href="?page={{ page_posts.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            <li>{{ page_posts.number }}/{{ page_posts.paginator.num_pages }}</li>
+            {% if page_posts.has_next %}
+                <li><a href="?page={{ page_posts.next_page_number }}">Next</a></li>
+                <li><a href="?page={{ page_posts.end_index }}">>>></a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+<form action="" method="get">
+  <div>
+    <label for="per_page">Количество записей на странице:</label>
+    <input type="number" name="per_page" id="per_page" min=1 max=100 value={{per_page}} >
+    <button type="submit">Применить</button>
+  </div>
+</form>
+</body>
+</html>
