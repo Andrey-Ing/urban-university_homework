@@ -1,0 +1,58 @@
+In [1]: from homeworks.models import Car, Airplane
+
+In [2]: car_obj = Car.objects
+
+In [3]: air_obj = Airplane.objects
+
+In [4]: # создадим объекты в БД
+
+In [5]: car_obj.create(name="Ferrari", price=1000000, color="red")
+Out[5]: <Car: Car object (8)>
+
+In [6]: car_obj.create(name="Lada", price=20000, color="white")
+Out[6]: <Car: Car object (9)>
+
+In [7]: car_obj.create(name="Audi", price=250000, color="blue")
+Out[7]: <Car: Car object (10)>
+
+In [8]: air_obj.create(name="Boeing 737", max_speed=852)
+Out[8]: <Airplane: Airplane object (14)>
+
+In [9]: air_obj.create(name="Airbus A380", max_speed=903)
+Out[9]: <Airplane: Airplane object (15)>
+
+In [10]: air = Airplane(name="Sukhoi Superjet 100", max_speed=870)
+
+In [11]: # изменение марки машины по id = 3
+
+In [12]: car_obj.get(id = 3).name
+Out[12]: 'Audi'
+
+In [13]: change = car_obj.get(id = 3)
+
+In [14]: change.name = 'Lamborghini'
+
+In [15]: change.save()
+
+In [16]: car_obj.get(id = 3).name
+Out[16]: 'Lamborghini'
+
+In [17]: # удаление 'Airbus A380'
+
+In [18]: all_air = Airplane.objects.all()
+
+In [19]: all_air
+Out[19]: <QuerySet [<Airplane: Airplane object (1)>, <Airplane: Airplane object (4)>, <Airplane: Airplane object (5)>, <Airplane: Airplane object (7)>, <Airplane: Airplane object (8)>, <Airplane: Airplane object (9)>, <Airplane: Airplane object (10)>, <Airplane: Airplane object (12)>, <Airplane: Airplane object (13)>, <Airplane: Airplane object (14)>, <Airplane: Airplane object (15)>]>
+
+In [20]: all_air.filter(name = 'Airbus A380').delete()
+Out[20]: (2, {'homeworks.Airplane': 2})
+
+In [21]: all_air
+Out[21]: <QuerySet [<Airplane: Airplane object (1)>, <Airplane: Airplane object (4)>, <Airplane: Airplane object (5)>, <Airplane: Airplane object (7)>, <Airplane: Airplane object (8)>, <Airplane: Airplane object (9)>, <Airplane: Airplane object (10)>, <Airplane: Airplane object (12)>, <Airplane: Airplane object (14)>]>
+
+In [22]: # выведем объекты машин дороже 50000
+
+In [24]: all_car = Car.objects.all()
+
+In [25]: all_car.filter(price__gt=50000)
+Out[25]: <QuerySet [<Car: Car object (1)>, <Car: Car object (3)>, <Car: Car object (4)>, <Car: Car object (5)>, <Car: Car object (7)>, <Car: Car object (8)>, <Car: Car object (10)>]>
