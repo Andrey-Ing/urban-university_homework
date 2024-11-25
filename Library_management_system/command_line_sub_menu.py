@@ -57,7 +57,9 @@ class SubMenu(InputInfoBook):
         super().__init__()
 
     def add_book(self):
-        pass
+        book = bc.BookBase(self.get_title(), self.get_author(), self.get_year())
+        id_new_book = bc.add_book_in_library(book)
+        print('\033[32m' + f"Книга успешно добавлена, ID: {id_new_book}" + '\033[0m')
 
     def delete_book(self):
         id_book = self.get_id()
@@ -96,15 +98,26 @@ class SubMenu(InputInfoBook):
     def print_all_books():
         books_dict = bc.get_all_books_in_library()
         for id_book, book in books_dict.items():
-            print('\033[33m' '*' * 15, '\033[0m' '\n'
-                  '\033[1m' + 'ID книги:\t' + f'{id_book}' + '\033[0m\n'
-                  f"Название:\t{book[bc.BookBase.title_idx]}\n"
-                  f"Автор:\t\t{book[bc.BookBase.author_idx]}\n"
-                  f"Год издания:\t{book[bc.BookBase.year_idx]}\n"
-                  f"{'\033[32m' + 'в наличии' + '\033[0m' if book[bc.BookBase.status_idx] else
-                     '\033[31m' + 'выдана' + '\033[0m'}\n")
+            print('\033[33m' + '*' * 15 + '\033[0m\n\
+                    \033[1m' + 'ID книги:\t' + f'{id_book}' + '\033[0m\n'
+                                                              f"Название:\t{book[bc.BookBase.title_idx]}\n"
+                                                              f"Автор:\t\t{book[bc.BookBase.author_idx]}\n"
+                                                              f"Год издания:\t{book[bc.BookBase.year_idx]}\n"
+                                                              f"{'\033[32m' + 'в наличии' + '\033[0m' if book[bc.BookBase.status_idx] else
+                                                              '\033[31m' + 'выдана' + '\033[0m'}\n")
 
         print('\033[44m' + f'Всего книг в библиотеке: {len(books_dict)}' + '\033[0m')
 
     def change_status(self):
-        pass
+        id_book = self.get_id()
+        if id_book in bc.get_all_books_in_library():
+            status_now = f"{'\033[32m' + 'в наличии' + '\033[0m' if bc.get_book_from_id(id_book).status else
+            '\033[31m' + 'выдана' + '\033[0m'}"
+            print(f"Текущий статус книги:", status_now)
+            new_status = self.get_status()
+            bc.change_book_status(id_book, new_status)
+            print('Оставлено без изменений' if bc.get_book_from_id(id_book).status == new_status else 'Изменено')
+            return True
+        else:
+            print('\033[31m' + f"Книги с ID: {id_book} нет в библиотеке" + '\033[0m')
+            return False

@@ -39,15 +39,9 @@
         "fdd",
         "dgtgt",
         2998,
-        true
+        false
     ],
     "DM-26873": [
-        "fdd",
-        "dgtgt",
-        2998,
-        true
-    ],
-    "IY-17316": [
         "fdd",
         "dgtgt",
         2998,
@@ -75,6 +69,18 @@
         "rtwr",
         "wtr",
         353,
+        true
+    ],
+    "AP-64759": [
+        "Andrey",
+        "Machonin",
+        1988,
+        true
+    ],
+    "MP-97640": [
+        "fds",
+        "gsgf",
+        1988,
         true
     ]
 }

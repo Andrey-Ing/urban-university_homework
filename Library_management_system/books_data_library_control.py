@@ -24,7 +24,7 @@ class BookBase:
         self.year = year
         self.status = status
 
-    def get_data(self):
+    def get_serial_data(self):
         return [self.title, self.author, self.year, self.status]
 
     title_idx = 0
@@ -47,7 +47,7 @@ def _library_save_data(filename: str, data: dict):
 def add_book_in_library(book: BookBase) -> str:
     data_books = _library_read_data(storage_books_name)
     new_id = get_new_id(data_books)
-    data_books[new_id] = book.get_data()
+    data_books[new_id] = book.get_serial_data()
     _library_save_data(storage_books_name, data_books)
     return new_id
 
@@ -83,3 +83,15 @@ def change_book_status(book_id: str, status: bool) -> bool:
         return True
     else:
         return False
+
+
+def get_book_from_id(book_id: str) -> BookBase:
+    data_books = _library_read_data(storage_books_name)
+    if book_id in data_books:
+        book_data = data_books[book_id]
+        return BookBase(book_data[BookBase.title_idx],
+                        book_data[BookBase.author_idx],
+                        book_data[BookBase.year_idx],
+                        book_data[BookBase.status_idx])
+    else:
+        raise (KeyError(f"Book with id {book_id} not found"))
