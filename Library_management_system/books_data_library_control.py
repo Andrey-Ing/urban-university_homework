@@ -1,3 +1,4 @@
+import re
 from random import randint
 import json
 
@@ -62,13 +63,26 @@ def delete_book_in_library(book_id: str) -> bool:
         return False
 
 
-def find_book_in_library(title: str = None, author: str = None, year: int = None) -> list:
+def find_book_in_library(title: str = None, author: str = None, year: str = None) -> list:
     result = []
     data_books = _library_read_data(storage_books_name)
-    for book_id, book in data_books.items():
-        if book[BookBase.title_idx] == title or book[BookBase.author_idx] == author or book[BookBase.year_idx] == year:
-            result.append(book_id)
-    return result
+    try:
+        if title is not None:
+            for book_id, book in data_books.items():
+                if re.fullmatch(title, book[BookBase.title_idx]):
+                    result.append(book_id)
+        if author is not None:
+            for book_id, book in data_books.items():
+                if re.fullmatch(author, book[BookBase.author_idx]):
+                    result.append(book_id)
+        if year is not None:
+            for book_id, book in data_books.items():
+                if re.fullmatch(str(year), str(book[BookBase.year_idx])):
+                    result.append(book_id)
+
+        return result
+    except re.error:
+        return list()
 
 
 def get_all_books_in_library() -> dict:

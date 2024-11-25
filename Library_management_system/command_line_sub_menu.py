@@ -1,13 +1,16 @@
 import books_data_library_control as bc
+from custom_string import CustomString
 
 
 class InputInfoBook:
-    title_min_max_length = 1, 200
-    autor_min_max_length = 1, 100
-    year_min_max = -7000, 3000
-    acceptable_status_book = 'н', 'в'
-    invalid_message = '\033[31mНе понял ввод!\033[0m'
-    invalid_id_message = '\033[31mНеверный идентификатор! ID должен содержать две буквы, дефис и число\033[0m'
+    def __init__(self):
+        self.title_min_max_length = 1, 200
+        self.autor_min_max_length = 1, 100
+        self.year_min_max = -7000, 3000
+        self.acceptable_status_book = 'i', 'o'
+        self.invalid_message = "Не понял ввод!"
+        self.invalid_id_message = "Неверный идентификатор! ID должен содержать две буквы, дефис и число"
+        self.cs = CustomString()
 
     def get_title(self):
         title = str(input("Введите название книги: "))
@@ -47,7 +50,7 @@ class InputInfoBook:
     def get_id(self):
         id_book = input("Введите ID книги: ")
         while len(id_book) < 4 or not (id_book[:2].isalpha() and id_book[2] == '-' and id_book[3:].isdigit()):
-            print(self.invalid_id_message)
+            print(self.cs.warning(self.invalid_id_message))
             id_book = input("Введите ID: ")
         return id_book
 
@@ -59,65 +62,85 @@ class SubMenu(InputInfoBook):
     def add_book(self):
         book = bc.BookBase(self.get_title(), self.get_author(), self.get_year())
         id_new_book = bc.add_book_in_library(book)
-        print('\033[32m' + f"Книга успешно добавлена, ID: {id_new_book}" + '\033[0m')
+        print(self.cs.good(f"Книга успешно добавлена, ID: {id_new_book}"))
 
     def delete_book(self):
         id_book = self.get_id()
         if bc.delete_book_in_library(id_book):
-            print(f"Книга с ID: {id_book} успешно удалена")
+            print(self.cs.good(f"Книга с ID: {id_book} успешно удалена"))
             return True
         else:
-            print('\033[31m' + f"Книга с ID: {id_book} не удалена (возможно, такой книги не существует)" + '\033[0m')
+            print(self.cs.warning(f"Книга с ID: {id_book} не удалена (возможно, такой книги не существует)"))
             return False
 
     def find_book(self):
         valid_selection_symbol = ('t', 'a', 'y')
-        invalid_message = '\033[31mНе понял выбор!\033[0m'
+        invalid_message = "Не понял выбор!"
         while True:
             choice = input("Для поиска книги:\n"
                            f"\tпо названию введите '{valid_selection_symbol[0]}'\n"
                            f"\tпо автору введите '{valid_selection_symbol[1]}'\n"
-                           f"\tпо году введите '{valid_selection_symbol[2]}'\n").lower()
+                           f"\tпо году введите '{valid_selection_symbol[2]}'\n")
 
             if choice in valid_selection_symbol:
                 break
             else:
-                print(f'{invalid_message}')
+                print(self.cs.warning(f'{invalid_message}'))
 
+        print(self.cs.info("Поддерживаются регулярные выражения"))
+        id_list = list()
         if choice == valid_selection_symbol[0]:
-            title = self.get_title()
-            return bc.find_book_in_library(title=title)
+            title = input("Введите название книги: ")
+            id_list = bc.find_book_in_library(title=title)
         elif choice == valid_selection_symbol[1]:
-            author = self.get_author()
-            return bc.find_book_in_library(author=author)
-        elif choice == valid_selection_symbol[2]:
-            year = self.get_year()
-            return bc.find_book_in_library(year=year)
+            author = input("Введите автора книги: ")
+            id_list = bc.find_book_in_library(author=author)
 
-    @staticmethod
-    def print_all_books():
+        elif choice == valid_selection_symbol[2]:
+            year = input("Введите год издания: ")
+            id_list = bc.find_book_in_library(year=year)
+
+        self.print_books_from_id(id_list)
+        print(self.cs.info_result(f"Всего найдено книг: {len(id_list)}"), '\n')
+
+    def print_all_books(self):
         books_dict = bc.get_all_books_in_library()
         for id_book, book in books_dict.items():
-            print('\033[33m' + '*' * 15 + '\033[0m\n\
-                    \033[1m' + 'ID книги:\t' + f'{id_book}' + '\033[0m\n'
-                                                              f"Название:\t{book[bc.BookBase.title_idx]}\n"
-                                                              f"Автор:\t\t{book[bc.BookBase.author_idx]}\n"
-                                                              f"Год издания:\t{book[bc.BookBase.year_idx]}\n"
-                                                              f"{'\033[32m' + 'в наличии' + '\033[0m' if book[bc.BookBase.status_idx] else
-                                                              '\033[31m' + 'выдана' + '\033[0m'}\n")
+            print(self.cs.separate('*' * 20) + '\n'
+                  f"ID книги:\t" + self.cs.id_book(f'{id_book}') + '\n'
+                  f"Название:\t{book[bc.BookBase.title_idx]}\n"
+                  f"Автор:\t\t{book[bc.BookBase.author_idx]}\n"
+                  f"Год издания:\t{book[bc.BookBase.year_idx]}\n" +
+                  self.cs.good('в наличии') if book[bc.BookBase.status_idx] else
+                  self.cs.warning('выдана') + '\n')
 
-        print('\033[44m' + f'Всего книг в библиотеке: {len(books_dict)}' + '\033[0m')
+        print(self.cs.info_result(f"Всего книг в библиотеке: {len(books_dict)}"), '\n')
+
+    def print_books_from_id(self, id_book_list: list):
+        books_dict = bc.get_all_books_in_library()
+        for id_book, book in books_dict.items():
+            for id_ in id_book_list:
+                if id_ == id_book:
+                    print(self.cs.separate('*' * 20) + '\n'
+                          f"ID книги:\t" + self.cs.id_book(f'{id_book}') + '\n'
+                          f"Название:\t{book[bc.BookBase.title_idx]}\n"
+                          f"Автор:\t\t{book[bc.BookBase.author_idx]}\n"
+                          f"Год издания:\t{book[bc.BookBase.year_idx]}\n" +
+                          self.cs.good('в наличии') if book[bc.BookBase.status_idx] else
+                          self.cs.warning('выдана') + '\n')
 
     def change_status(self):
         id_book = self.get_id()
         if id_book in bc.get_all_books_in_library():
-            status_now = f"{'\033[32m' + 'в наличии' + '\033[0m' if bc.get_book_from_id(id_book).status else
-            '\033[31m' + 'выдана' + '\033[0m'}"
-            print(f"Текущий статус книги:", status_now)
-            new_status = self.get_status()
-            bc.change_book_status(id_book, new_status)
-            print('Оставлено без изменений' if bc.get_book_from_id(id_book).status == new_status else 'Изменено')
+            current_status = bc.get_book_from_id(id_book).status
+            print(f"Текущий статус книги:", self.cs.good('в наличии') if current_status else (
+                    self.cs.warning('выдана') + '\n'))
+            required_status = self.get_status()
+            bc.change_book_status(id_book, required_status)
+            print("Оставлено без изменений" if current_status == required_status else
+                  self.cs.good("Изменено"))
+
             return True
         else:
-            print('\033[31m' + f"Книги с ID: {id_book} нет в библиотеке" + '\033[0m')
+            print(self.cs.warning(f"Книги с ID: {id_book} нет в библиотеке"))
             return False
