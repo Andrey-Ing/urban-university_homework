@@ -1,5 +1,5 @@
 """
-Этот модуль представляет собой набор подменю, которые выбираются в зависимости от
+Модуль представляет собой набор подменю, которые выбираются в зависимости от
 нужных пользователю задач. Подменю поддерживать ввод пользователем данных, через
 стандартный ввод и вывод результата. В результате работы подменю производиться и
 выполнение необходимых действий с данными в библиотеке.
@@ -54,12 +54,15 @@ class InputInfoBook:
         return int(year)
 
     def get_status(self) -> bool:
-        status = input(f"Введите статус книги '{self.acceptable_status_book[0]}' (в наличии) или "
-                       f"'{self.acceptable_status_book[1]}' (выдана): ")
+        val_in_choose = self.cs.choose(self.acceptable_status_book[0])
+        val_out_choose = self.cs.choose(self.acceptable_status_book[1])
+
+        status = input(f"Введите статус книги '{val_in_choose}' (в наличии) или "
+                       f"'{val_out_choose}' (выдана): ")
         while status not in self.acceptable_status_book:
             status = input(f"{self.invalid_message}\n"
-                           f"Нужно ввести '{self.acceptable_status_book[0]}' (в наличии) или "
-                           f"'{self.acceptable_status_book[1]}' (выдана): ")
+                           f"Нужно ввести '{val_in_choose}' (в наличии) или "
+                           f"'{val_out_choose}' (выдана): ")
         return True if status == self.acceptable_status_book[0] else False
 
     def get_id(self) -> str:

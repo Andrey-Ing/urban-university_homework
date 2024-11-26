@@ -1,25 +1,38 @@
+"""
+Модуль предоставляет точку входа в программу через класс Menu.
+Этот класс также содержит главное меню библиотеки, через которое
+осуществляется выбор основных действий с книгами.
+"""
+
 from command_line_sub_menu import SubMenu
 from custom_string import CustomString
 
-text_welcome = "Добро пожаловать в систему управления библиотекой!"
-
 
 class Menu(SubMenu):
+    """
+    Класс Menu предоставляет систему управления для выбора действий с библиотекой.
+    """
+
     def __init__(self):
         super().__init__()
-        self.valid_selection_symbol = ('a', 'd', 'f', 'p', 's', 'q')
-        self.choice_message = f"\tдобавление книги\t'{self.valid_selection_symbol[0]}'\n" \
-                              f"\tудаление книги\t'{self.valid_selection_symbol[1]}'\n" \
-                              f"\tпоиск книги\t'{self.valid_selection_symbol[2]}'\n" \
-                              f"\tотображение всех книг\t'{self.valid_selection_symbol[3]}'\n" \
-                              f"\tизменение статуса книги\t'{self.valid_selection_symbol[4]}'\n" \
-                              f"\tвыход из программы\t'{self.valid_selection_symbol[5]}'\n"
-        self.invalid_message = "Не понял выбор!"
+        self.cs = CustomString()
+        self.text_welcome = "Добро пожаловать в систему управления библиотекой!"  # выводится при запуске программы
+        self.valid_selection_symbol = ('a', 'd', 'f', 'p', 's', 'q')  # допустимые символы для выбора
+        self.choice_message = f"\tдобавление книги\t'{self.cs.choose(self.valid_selection_symbol[0])}'\n" \
+                              f"\tудаление книги\t'{self.cs.choose(self.valid_selection_symbol[1])}'\n" \
+                              f"\tпоиск книги\t'{self.cs.choose(self.valid_selection_symbol[2])}'\n" \
+                              f"\tотображение всех книг\t'{self.cs.choose(self.valid_selection_symbol[3])}'\n" \
+                              f"\tизменение статуса книги\t'{self.cs.choose(self.valid_selection_symbol[4])}'\n" \
+                              f"\tвыход из программы\t'{self.cs.choose_special(self.valid_selection_symbol[5])}'\n"
+        self.invalid_message = "Не понял выбор!"  # при выборе недопустимой команды
 
-    def run_choose(self):
+    def run_menu(self):
+        """Запускает цикл выбора команды и вызова подменю"""
+        print(self.cs.welcome(menu.text_welcome))
         choice = ''
         while choice != self.valid_selection_symbol[5]:
-            print(self.cs.info("Доступны следующие команды библиотеки, введите соответствующий символ для выбора:"))
+            print(self.cs.info("Доступны следующие команды библиотеки,\n"
+                               "введите соответствующий символ для выбора:"))
             while True:
                 choice = input(self.choice_message)
 
@@ -45,7 +58,5 @@ class Menu(SubMenu):
 
 
 if __name__ == '__main__':
-    cs = CustomString()
-    print(cs.welcome(text_welcome))
     menu = Menu()
-    menu.run_choose()
+    menu.run_menu()

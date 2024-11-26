@@ -1,5 +1,5 @@
 """
-Этот модуль предоставляет методы класса CustomString для добавления к строкам escape-кодов ANSI
+Модуль предоставляет методы класса CustomString для добавления к строкам escape-кодов ANSI
 в зависимости от типа сообщения. Благодаря этому при выводе строк меняется их цвет, цвет фона и стиль.
 """
 
@@ -13,6 +13,8 @@ class CustomString:
         self.welcome_ = '\033[43m'
         self.info_ = '\033[35m'
         self.info_result_ = '\033[46m'
+        self.choose_ = '\033[1m\033[32m'
+        self.choose_special_ = '\033[1m\033[31m'
         self.default_ = '\033[0m'
 
     def good(self, string: str):
@@ -35,3 +37,9 @@ class CustomString:
 
     def info_result(self, string: str):
         return self.info_result_ + string + self.default_
+
+    def choose(self, string: str):
+        return self.choose_ + string + self.default_
+
+    def choose_special(self, string: str):
+        return self.choose_special_ + string + self.default_
